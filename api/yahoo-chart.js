@@ -1,4 +1,4 @@
-const { fetchYahooChart, sendJson } = require("./_market-utils");
+const { fetchYahooChart, sendJson } = require("../lib/market-utils");
 
 module.exports = async function handler(request, response) {
   if (request.method !== "GET") {

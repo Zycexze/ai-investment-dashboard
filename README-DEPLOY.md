@@ -33,6 +33,20 @@ vercel --prod
 
 The frontend primarily calls `/api/market-data`, which aggregates public market data on the server side before sending a clean JSON payload to the dashboard.
 
+## Files To Upload
+
+Upload the contents of this folder:
+
+```txt
+api/
+lib/
+public/
+README-DEPLOY.md
+vercel.json
+```
+
+Do not upload a local `server.mjs` file to Vercel. Vercel uses the serverless files in `api/` instead. The frontend files must stay inside `public/`.
+
 ## Notes
 
 TradingView scanner and Yahoo Finance are public endpoints and may rate-limit or block cloud traffic. For a production trading product, replace them with a licensed market data provider and store the API key in Vercel Environment Variables.

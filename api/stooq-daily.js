@@ -1,4 +1,4 @@
-const { fetchStooqCsv, sendJson, sendText } = require("./_market-utils");
+const { fetchStooqCsv, sendJson, sendText } = require("../lib/market-utils");
 
 module.exports = async function handler(request, response) {
   if (request.method !== "GET") {

@@ -1,4 +1,4 @@
-const { buildMarketData, sendJson } = require("./_market-utils");
+const { buildMarketData, sendJson } = require("../lib/market-utils");
 
 module.exports = async function handler(request, response) {
   if (request.method !== "GET") {
