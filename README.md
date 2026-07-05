@@ -92,15 +92,6 @@ README-DEPLOY.md
 vercel.json
 ```
 
-不要把舊的本機檔案放在根目錄，例如：
-
-```txt
-app.js
-index.html
-styles.css
-server.mjs
-```
-
 部署步驟：
 
 1. 到 Vercel 建立新專案。
