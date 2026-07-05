@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI 投資量化策略儀表板</title>
-    <link rel="stylesheet" href="./styles.css?v=20260705-vercel-public">
-    <script src="./app.js?v=20260705-vercel-public" defer></script>
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("quant-dashboard-theme") || "dark";
+    </script>
+    <link rel="stylesheet" href="./styles.css?v=20260705-theme-switch">
+    <script src="./app.js?v=20260705-theme-switch" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -67,6 +70,12 @@
             <h2>量化決策中控台</h2>
           </div>
           <div class="topbar-actions">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="切換淺色模式">
+              <span class="theme-toggle-track" aria-hidden="true">
+                <span class="theme-toggle-thumb"></span>
+              </span>
+              <span id="theme-toggle-label">深色</span>
+            </button>
             <div class="market-clock">
               <span>最後分析</span>
               <strong id="last-updated">--:--:--</strong>

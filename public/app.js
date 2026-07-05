@@ -1,7 +1,8 @@
 const STORAGE_KEYS = {
   favorites: "quant-dashboard-favorites",
   watched: "quant-dashboard-watched",
-  hiddenDefaults: "quant-dashboard-hidden-defaults"
+  hiddenDefaults: "quant-dashboard-hidden-defaults",
+  theme: "quant-dashboard-theme"
 };
 
 const DEFAULT_SYMBOLS = ["NASDAQ:NVDA", "NASDAQ:TSLA", "NASDAQ:AAPL", "NYSE:TSM"];
@@ -104,6 +105,7 @@ const elements = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
   cacheElements();
+  applyTheme(loadTheme());
   state.favorites = loadSymbols(STORAGE_KEYS.favorites, ["NASDAQ:NVDA"]);
   state.hiddenDefaults = loadSymbols(STORAGE_KEYS.hiddenDefaults, []);
   const visibleDefaults = DEFAULT_SYMBOLS.filter((symbol) => !state.hiddenDefaults.includes(symbol));
@@ -125,6 +127,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 function cacheElements() {
   [
     "strategy-button",
+    "theme-toggle",
+    "theme-toggle-label",
     "symbol-search-form",
     "symbol-search",
     "favorite-current-button",
@@ -177,6 +181,7 @@ function cacheElements() {
 
 function bindEvents() {
   elements.strategyButton.addEventListener("click", runAIStrategy);
+  elements.themeToggle.addEventListener("click", toggleTheme);
   elements.symbolSearchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const symbol = normalizeSymbol(elements.symbolSearch.value);
@@ -247,6 +252,29 @@ function createGeneratedProfile(symbol) {
     finalVolume: 12000000 + (seed % 82) * 1000000,
     verified: false
   });
+}
+
+function loadTheme() {
+  const stored = window.localStorage.getItem(STORAGE_KEYS.theme);
+  return stored === "light" ? "light" : "dark";
+}
+
+function applyTheme(theme) {
+  const normalized = theme === "light" ? "light" : "dark";
+  document.documentElement.dataset.theme = normalized;
+  window.localStorage.setItem(STORAGE_KEYS.theme, normalized);
+  const isLight = normalized === "light";
+  elements.themeToggle.setAttribute("aria-pressed", String(isLight));
+  elements.themeToggle.setAttribute("aria-label", isLight ? "切換深色模式" : "切換淺色模式");
+  elements.themeToggleLabel.textContent = isLight ? "淺色" : "深色";
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  applyTheme(nextTheme);
+  if (window.TradingView) {
+    renderTradingView();
+  }
 }
 
 function ensureProfile(symbol) {
@@ -686,10 +714,10 @@ function renderTradingView() {
     symbol: profile.symbol,
     interval: profile.interval,
     timezone: "Asia/Taipei",
-    theme: "dark",
+    theme: document.documentElement.dataset.theme === "light" ? "light" : "dark",
     style: "1",
     locale: "zh_TW",
-    toolbar_bg: "#071015",
+    toolbar_bg: document.documentElement.dataset.theme === "light" ? "#ffffff" : "#071015",
     enable_publishing: false,
     hide_top_toolbar: false,
     hide_side_toolbar: false,
